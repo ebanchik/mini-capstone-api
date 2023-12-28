@@ -14,8 +14,9 @@ class ProductsController < ApplicationController
     @product = Product.new(
       name: params[:name], 
       price: params[:price], 
-      image_url: params[:image_url],
-      description: params[:description]
+      supplier_id: params[:supplier_id],
+      description: params[:description],
+      inventory: params[:inventory]
     )
 
     if @product.save
@@ -27,18 +28,23 @@ class ProductsController < ApplicationController
 
   def update
     @product = Product.find_by(id: params[:id])
-    @product.name = params[:name] || @product.name
-    @product.price = params[:price] || @product.price
-    @product.image_url = params[:image_url] || @product.image_url
-    @product.description = params[:description] || @product.description
-  
+    @product.update(
+      name: params[:name] || @product.name,
+      price: params[:price] || @product.price,
+      supplier_id: params[:supplier_id] || @product.supplier_id,
+      description: params[:description] || @product.description
+    )
     @product.save
-    render template: "products/show"
+    render :show
   end
 
   def destroy
     @product = Product.find_by(id: params[:id])
     @product.destroy
     render json: {message: "product removed"}
+  end
+
+  def name
+    @product = product.supplier.name
   end
 end
