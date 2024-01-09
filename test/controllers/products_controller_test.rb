@@ -19,11 +19,14 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
 
   test "create" do
     assert_difference "Product.count", 1 do
-      post "/products.json", params: { name: "test product", price: 1, image_url: "image.jpg", description: "test description", supplier_id: Supplier.first.id  }
+      post "/products.json", params: { name: "test product", price: 1, image_url: "image.jpg", description: "test description", 
+      supplier_id: Supplier.first.id  },
+        headers: { "Authorization" => "Bearer #{@jwt}" }
     end
 
     assert_difference "Product.count", 0 do
-      post "/products.json", params: {}
+      post "/products.json", params: {},
+      headers: { "Authorization" => "Bearer #{@jwt}" }
       assert_response 422
     end
   end
@@ -37,15 +40,17 @@ class ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Updated name", data["name"]
     assert_equal product.price.to_s, data["price"]
     assert_equal product.image_url, data["image_url"]
-    assert_equal product.description, data["description"]
-    
+    assert_equal product.description, data["description"],
+    headers: { "Authorization" => "Bearer #{@jwt}" }
+
     patch "/products/#{product.id}.json", params: { name: "" }
     assert_response 422
   end
 
   test "destroy" do
     assert_difference "Product.count", -1 do
-      delete "/products/#{Product.first.id}.json"
+      delete "/products/#{Product.first.id}.json",
+      headers: { "Authorization" => "Bearer #{@jwt}" }
       assert_response 200
     end
   end

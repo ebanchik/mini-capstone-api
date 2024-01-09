@@ -13,7 +13,7 @@ class OrdersController < ApplicationController
       tax: tax,
       total: total
  )
-    render json: { message: "Order created successfully" }, status: :created
+    render :show
   end
 
   def show
@@ -21,12 +21,14 @@ class OrdersController < ApplicationController
     @order = Order.find_by(id: params[:id])
     if @order.user_id == current_user.id
       render :show
+    else
+      render json: {message: "You can't do this."}
     end
   end
 
   def index
-    @orders = Order.where(user_id: current_user.id)
-    render json: @order
+    @orders = current_user.orders
+    render :index
   end
 
 end
