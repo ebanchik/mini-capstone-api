@@ -9,10 +9,12 @@ Rails.application.routes.draw do
 
   post "/sessions" => "sessions#create"
 
-  post "/orders" => "orders#create"
+  post "/order" => "orders#create"
   get "/orders/:id" => "orders#show"
   get "/orders" => "orders#index"
 
   post "/add_to_cart" => "carted_products#create"
   get "/cart" => "carted_products#index"
+  delete "delete_cart_item" => "carted_products#destroy"
+
 end

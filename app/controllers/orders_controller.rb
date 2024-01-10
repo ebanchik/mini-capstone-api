@@ -1,22 +1,46 @@
 class OrdersController < ApplicationController
-  belongs_to :user
   
   def create
-    product = Product.find(params[:product_id])
-    subtotal = product.price * params[:quantity].to_i
-    tax = subtotal * 0.09
-    total = subtotal + tax
+    
+    @carted_products = CartedProduct.all.where(user_id: current_user.id, status: "carted")
+    
+    calculated_subtotal = 0
+    
+    @carted_products.each do |carted_product|
+      calculated_subtotal += carted_product.product.price * carted_product.quantity
+    end
+    
+    tax_rate = 0.09
+    tax = calculated_subtotal * tax_rate
+    calculated_total = (calculated_subtotal + tax)
 
-    @order = Order.create(
-      
+    p tax
+    p calculated_subtotal.to_s
+    p calculated_total.to_s
+    
+
+    @order = Order.new(
       user_id: current_user.id,
-      product_id: params[:product_id],
-      quantity: params[:quantity],
-      subtotal: subtotal,
+      subtotal: calculated_subtotal,
       tax: tax,
-      total: total
- )
-    render :show
+      total: calculated_total
+    )
+
+    if @order.save!
+      render template: "orders/show"
+      @carted_products.each do |carted_product|
+        carted_product.status = "purchases"
+        carted_product.order_id = @order.id
+        p carted_product.status
+        p carted_product.order_id
+        carted_product.save
+      end
+    
+    else
+      render json: {message: "There was a problem creating your order"}
+      
+    end
+    
   end
 
   def show

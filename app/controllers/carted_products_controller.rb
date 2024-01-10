@@ -13,7 +13,10 @@ class CartedProductsController < ApplicationController
   end
 
   def index
-    @carted_products = CartedProduct.where(status: "carted")
+    @carted_products = CartedProduct.where(status: "carted", user_id: current_user.id)
     render json: @carted_products
   end
+
+
+  
 end
