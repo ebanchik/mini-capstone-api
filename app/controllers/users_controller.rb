@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  has_many :orders
+  
   def create
     user = User.new(
       name: params[:name],

@@ -1,4 +1,6 @@
 class CartedProductsController < ApplicationController
+  
+
   def create
     @carted_product = CartedProduct.create!(
       user_id: current_user.id,
@@ -8,5 +10,10 @@ class CartedProductsController < ApplicationController
       order_id: nil
   )
     render json: @carted_product
+  end
+
+  def index
+    @carted_products = CartedProduct.where(status: "carted")
+    render json: @carted_products
   end
 end

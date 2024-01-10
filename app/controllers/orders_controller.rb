@@ -1,4 +1,6 @@
 class OrdersController < ApplicationController
+  belongs_to :user
+  
   def create
     product = Product.find(params[:product_id])
     subtotal = product.price * params[:quantity].to_i
@@ -6,6 +8,7 @@ class OrdersController < ApplicationController
     total = subtotal + tax
 
     @order = Order.create(
+      
       user_id: current_user.id,
       product_id: params[:product_id],
       quantity: params[:quantity],
