@@ -17,4 +17,6 @@ Rails.application.routes.draw do
   get "/cart" => "carted_products#index"
   delete "delete_cart_item" => "carted_products#destroy"
 
+  get "/suppliers" => "suppliers#index"
+
 end
