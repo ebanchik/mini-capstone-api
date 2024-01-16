@@ -29,7 +29,7 @@ class OrdersController < ApplicationController
     if @order.save!
       render template: "orders/show"
       @carted_products.each do |carted_product|
-        carted_product.status = "purchases"
+        carted_product.status = "purchased"
         carted_product.order_id = @order.id
         p carted_product.status
         p carted_product.order_id

@@ -14,15 +14,17 @@ class ProductsController < ApplicationController
   end
 
   def create
+    # supplier = Supplier.find_by(name: params[:supplier])
+
     @product = Product.new(
       name: params[:name], 
       price: params[:price], 
-      supplier_id: params[:supplier_id],
+      supplier_id: params[:supplier],
       description: params[:description],
       inventory: params[:inventory]
     )
 
-    if @product.save
+    if @product.save!
       render template: "products/show"
     else
       render json: {errors: @product.errors.full_messages}, status: :unprocessable_entity
