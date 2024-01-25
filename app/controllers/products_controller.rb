@@ -21,7 +21,8 @@ class ProductsController < ApplicationController
       price: params[:price], 
       supplier_id: params[:supplier],
       description: params[:description],
-      inventory: params[:inventory]
+      inventory: params[:inventory],
+      image_url: params[:image_url]
     )
 
     if @product.save!
